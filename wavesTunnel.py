@@ -1,10 +1,10 @@
-from web3 import Web3
 import sqlite3 as sqlite
 import requests
+import datetime
 import time
 import base58
+import pywaves as pw
 import traceback
-from ethtoken.abi import EIP20_ABI
 
 class WavesTunnel(object):
 
@@ -12,7 +12,6 @@ class WavesTunnel(object):
         self.config = config
         self.dbCon = sqlite.connect('gateway.db')
 
-        self.w3 = Web3(Web3.HTTPProvider(self.config['erc20']['endpoint']))
         self.node = config['waves']['node']
 
         cursor = self.dbCon.cursor()
@@ -52,22 +51,18 @@ class WavesTunnel(object):
                 cursor = dbCon.cursor()
                 targetAddress = base58.b58decode(transaction['attachment']).decode()
                 if len(targetAddress) > 1 and self.txNotYetExecuted(transaction['id'], dbCon):
+                    #amount = transaction['amount'] - (int(self.config['tn']['fee'] * 10 ** self.config['tn']['decimals']))
                     amount = transaction['amount'] / 10 ** self.config['waves']['decimals']
-                    amount -= self.config['erc20']['fee']
-                    amount *= 10 ** self.config['erc20']['contract']['decimals']
+                    amount -= self.config['tn']['fee']
+                    amount *= 10 ** self.config['tn']['decimals']
                     amount = int(amount)
-                    #amount = int(((transaction['amount'] / 10 ** self.config['waves']['decimals'])  - self.config['erc20']['fee']) * 10 ** self.config['erc20']['contract']['decimals'])
-                    token = self.w3.eth.contract(address=self.config['erc20']['contract']['address'], abi=EIP20_ABI)
-                    nonce = self.w3.eth.getTransactionCount(self.config['erc20']['gatewayAddress'])
-                    tx = token.functions.transfer(targetAddress, amount).buildTransaction({
-                        'chainId': 1,
-                        'gas': 100000,
-                        'gasPrice': self.w3.toWei(22, 'gwei'),
-                        'nonce': nonce
-                    })
-                    signed_tx = self.w3.eth.account.signTransaction(tx, private_key=self.config['erc20']['privateKey'])
-                    txId = self.w3.eth.sendRawTransaction(signed_tx.rawTransaction)
-                    cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "ethTxId") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + txId.hex() + '")')
+                    
+                    pw.setNode(node=self.config['tn']['node'], chain=self.config['tn']['network'], chain_id='L')
+                    tnAddress = pw.Address(seed = self.config['tn']['gatewaySeed'])
+                    tx = tnAddress.sendAsset(pw.Address(targetAddress), pw.Asset(self.config['tn']['assetId']), amount, '', '', 2000000)
+                    dateTimeObj = datetime.datetime.now()
+                    timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+                    cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "timestamp", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + tx['id'] + '", "' + transaction['id'] + '", "' + timestampStr +  '", "' + str(amount) + '", "' + str(self.config['tn']['fee']) + '")')
                     dbCon.commit()
                     print('outgoing transfer completed')
 
