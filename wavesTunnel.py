@@ -59,7 +59,14 @@ class WavesTunnel(object):
                     
                     pw.setNode(node=self.config['tn']['node'], chain=self.config['tn']['network'], chain_id='L')
                     tnAddress = pw.Address(seed = self.config['tn']['gatewaySeed'])
-                    tx = tnAddress.sendAsset(pw.Address(targetAddress), pw.Asset(self.config['tn']['assetId']), amount, '', '', 2000000)
+                    try:
+                        addr = pw.Address(targetAddress)
+                        tx = tnAddress.sendAsset(pw.Address(targetAddress), pw.Asset(self.config['tn']['assetId']), amount, '', '', 2000000)
+                        print("sended tx"+str(tx))
+                    except Exception as e:
+                        tx = {"id":"invalid attachment"}
+                        print('invalid attachment')                    
+                    
                     dateTimeObj = datetime.datetime.now()
                     timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
                     cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "timestamp", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + tx['id'] + '", "' + transaction['id'] + '", "' + timestampStr +  '", "' + str(amount) + '", "' + str(self.config['tn']['fee']) + '")')
