@@ -1,6 +1,7 @@
 import sqlite3 as sqlite
 import json
 import threading
+import setupDB
 from tntunnel import TNTunnel
 from wavesTunnel import WavesTunnel
 from flask import Flask, render_template
@@ -29,6 +30,17 @@ def getHeights():
     return { result[0][0]: result[0][1], result[1][0]: result[1][1] }
 
 def main():
+    #check db
+    try:
+        dbCon = sqlite.connect('gateway.db')
+        result = dbCon.cursor().execute('SELECT chain, height FROM heights WHERE chain = "TN" or chain = "Waves"').fetchall()
+        dbcon.close()
+        if len(result) == 0:
+            setupDB.initialisedb(config)
+    except:
+        setupDB.createdb()
+        setupDB.initialisedb(config)
+        
     tnTunnel = TNTunnel(config)
     wavesTunnel = WavesTunnel(config)
     wavesThread = threading.Thread(target=wavesTunnel.iterate)
