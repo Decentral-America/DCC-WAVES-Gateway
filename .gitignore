@@ -1,1 +1,4 @@
-config.*
+config.json
+*.db
+__pycache__/*
+.vscode/*
