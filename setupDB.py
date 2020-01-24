@@ -2,14 +2,6 @@ import sqlite3 as sqlite
 import requests
 
 def createdb():
-    createTxTable = '''
-        CREATE TABLE IF NOT EXISTS txs (
-            id integer PRIMARY KEY,
-            chain text NOT NULL,
-            tx text NOT NULL
-        );
-    '''
-
     createHeightTable = '''
         CREATE TABLE IF NOT EXISTS heights (
             id integer PRIMARY KEY,
@@ -33,7 +25,6 @@ def createdb():
 
     con = sqlite.connect('gateway.db')
     cursor = con.cursor()
-    cursor.execute(createTxTable)
     cursor.execute(createHeightTable)
     cursor.execute(createTableExecuted)
     con.commit()
@@ -44,7 +35,6 @@ def initialisedb(config):
     tnlatestBlock = requests.get(config['tn']['node'] + '/blocks/height').json()['height'] - 1
 
     #get current Waves block:
-    if config['erc20']['endpoint'].startswith('http'):
     waveslatestBlock = requests.get(config['waves']['node'] + '/blocks/height').json()['height'] - 1
 
     con = sqlite.connect('gateway.db')
