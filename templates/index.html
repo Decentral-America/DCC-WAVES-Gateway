@@ -1,55 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>ERC-20 <-> TN Gateway</title>
-	<link href="static/bootstrap.min.css" rel="stylesheet">
-	<link rel="icon" href="static/favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/index.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet">
+  <title>{{chainName}} <-> TN Gateway</title>
 </head>
+
 <body>
-<div class="container-fluid">
-	<div className="col-md-12">
-		<div className="page-header">
-		  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			  <ul class="navbar-nav">
-				TN height: {{ tnHeight }}, TN Gateway Address: {{ tnAddress }}
-				<br />
-				WAVES height: {{ wavesHeight }}, WAVES Gateway Address: {{ wavesAddress }}
-			  </ul>
-			</div>
-		  </nav>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="jumbotron">
-				<h2>
-					{{chainName}} <-> TN Gateway
-				</h2>
-				<p>
-					This is a simple gateway for TN tokens to the Waves Platform. 
-					For sending tokens from the TN Platform to the Waves blockchain, just add the Waves address
-					that should receive the tokens as the description of the transfer and send the tokens to the TN
-					address of the gateway.
-					<p>
-					For sending tokens from the Waves Platform to the TN blockchain, just add the TN address
-					that should receive the tokens as the description of the transfer and send the tokens to the Waves
-					address of the gateway.
-					<p>
-					<h4>DISCLAIMER: Use this gateway at your own risk!!!</h4>
-				</p>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4">
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+  <div class="content">
+    <header class="deskHeader">
+      <div class="logos">
+        <div class="logobg">
+          <img class="logo" src="{{ url_for('static', path='/waves.png') }}" alt={{chainName}} + " Logo">
+        </div>
+        <div class="title">
+          <h1>
+            {{chainName}} ⬌ Gateway
+          </h1>
+        </div>
+        <div class="logobg">
+          <img class="logo" src="{{ url_for('static', path='/tn.png') }}" alt="TN Logo">
+        </div>
+      </div>
+    </header>
+    <header class="header">
+      <div class="title">
+        <h1>
+          {{chainName}} ⬍ Gateway
+        </h1>
+      </div>
+      <div class="logos">
+        <div class="logobg">
+          <img class="logo" src="{{ url_for('static', path='/waves.png') }}" alt={{chainName}} + " Logo">
+        </div>
+        <div class="logobg">
+          <img class="logo" src="{{ url_for('static', path='/tn.png') }}" alt="TN Logo">
+        </div>
+      </div>
+    </header>
+    <div class="description down">
+      <div class="emote">
+        <p>🛈</p>
+      </div>
+      <div class="info">
+        <h2>This is a gateway for exchanging {{chainName}} tokens between the Waves and Turtle Network Platform.</h2>
+        <h3>
+					<strong>To Send {{chainName}} to Waves Network,</strong> using Turtle Network wallet
+        </h3>
+        <p>
+          - Click "SEND"</br>
+          - Recipient's Address = {{ tnAddress }}</br>
+          - Attachment = only insert your Waves Network wallet address</br>
+        </p>
+        <h3>
+					<strong>To Send {{chainName}} to Turtle Network,</strong> using Waves Network wallet
+        </h3>
+        <p>
+          - Click "SEND"</br>
+          - Recipient's Address = {{ wavesAddress }}</br>
+          - Description = only insert your Turtle Network wallet address</br>
+        </p>
+      </div>
+    </div>
+    <div class="description left">
+      <div class="emote">
+        <p>🛈</p>
+      </div>
+      <div class="info">
+        <p class="address">
+          Turtle Network height: <strong>{{ tnHeight }}</strong>, Turtle Network Gateway Address: <strong>{{ tnAddress }}</strong>
+        </p>
+        <p class="address">
+          Waves Network height: <strong>{{ wavesHeight }}</strong>, Waves Network Gateway Address: <strong>{{ wavesAddress }}</strong>
+        </p>
+        <p class="address">
+          {{chainName}} Official ASSET ID: <strong>{{ assetID }}</strong>
+        </p>
+      </div>
+    </div>
+    <div class="description right">
+      <div class="emote">
+        <p>⚠</p>
+      </div>
+      <div class="disclaimer">
+        <h3>
+          DISCLAIMER: Erronious sends can only be recovered if they are in
+          gateway controlled wallets.
+        </h3>
+        <h3>
+          Fees: network fees + {{ fee }} per transaction </br>
+          Do not send less than network fee + {{ fee }} + (your balance you wish to deposit or withdraw)
+        </h3>
+        <h3>
+          <strong>Recovery policy</strong></br>
+          - Please contact support within 3 days of transfer issue.</br>
+          - Recovery fee on end-user mistake = 15%.</br>
+        </h3>
+        <p class="mail">
+          This gateway is run by {{ company }} - contact us at <a href="mailto:{{ email }}">{{ email }}</a> or Telegram at <a href="{{ telegram }}">{{ telegram }}</a>
+        </p>
+      </div>
+    </div>
+    <div class="description up" style="display: none;">
+      <div class="emote">
+        <p>⇌</p>
+      </div>
+      <form class="form" role="form">
+        <div class="fields">
+          <div class="eth">
+            <label for="ethAddress">
+              ETH Address
+            </label>
+            <input type="text" class="form-control" id="ethAddress" />
+          </div>
+          <div class="tn">
+            <label for="tnAddress">
+              TN Address
+            </label>
+            <input type="text" class="form-control" id="tnAddress" />
+          </div>
+        </div>
+        <div class="buttons">
+          <button onclick="establishTunnel(event)" class="establish">
+            Establish Tunnel
+          </button>
+          <button onclick="checkETHAddress(event)" class="check">
+            Check ETH Tunnel
+          </button>
+        </div>
+      </form>
+    </div>
+    <a class="freepik" href="https://www.freepik.com/free-photos-vectors/background">Background vector created by pikisuperstar - www.freepik.com</a>
+  </div>
 </body>
+
 </html>

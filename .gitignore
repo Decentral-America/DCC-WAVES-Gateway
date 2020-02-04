@@ -2,3 +2,6 @@ config.json
 *.db
 __pycache__/*
 .vscode/*
+config.json
+templates/index_old.html
+templates/index_eth.html

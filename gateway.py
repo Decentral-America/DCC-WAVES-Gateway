@@ -1,52 +1,35 @@
 import sqlite3 as sqlite
 import json
-import threading
-import setupDB
-from tntunnel import TNTunnel
-from wavesTunnel import WavesTunnel
-from flask import Flask, render_template
+from fastapi import FastAPI
+import uvicorn
+from starlette.requests import Request
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
-app = Flask(__name__)
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 with open('config.json') as json_file:
     config = json.load(json_file)
 
-@app.route('/')
-def hello():
-    heights = getHeights()
+@app.get("/")
+async def index(request: Request):
+    heights = await getHeights()
+    return templates.TemplateResponse("index.html", {"request": request, 
+                                                     "chainName": config['main']['name'],
+                                                     "assetID": config['tn']['assetId'],
+                                                     "fee": config['tn']['fee'],
+                                                     "company": config['main']['company'],
+                                                     "email": config['main']['contact-email'],
+                                                     "telegram": config['main']['contact-telegram'],
+                                                     "wavesHeight": heights['Waves'],
+                                                     "tnHeight": heights['TN'],
+                                                     "tnAddress": config['tn']['gatewayAddress'],
+                                                     "wavesAddress": config['waves']['gatewayAddress']})
 
-    return render_template('index.html', chainName = config['waves']['name'],
-                           wavesHeight = heights['Waves'],
-                           tnHeight = heights['TN'],
-                           tnAddress = config['tn']['gatewayAddress'],
-                           wavesAddress = config['waves']['gatewayAddress'])
-
-@app.route('/heights')
-def getHeights():
+@app.get('/heights')
+async def getHeights():
     dbCon = sqlite.connect('gateway.db')
-
     result = dbCon.cursor().execute('SELECT chain, height FROM heights WHERE chain = "Waves" or chain = "TN"').fetchall()
-
     return { result[0][0]: result[0][1], result[1][0]: result[1][1] }
-
-def main():
-    #check db
-    try:
-        dbCon = sqlite.connect('gateway.db')
-        result = dbCon.cursor().execute('SELECT chain, height FROM heights WHERE chain = "TN" or chain = "Waves"').fetchall()
-        dbcon.close()
-        if len(result) == 0:
-            setupDB.initialisedb(config)
-    except:
-        setupDB.createdb()
-        setupDB.initialisedb(config)
-        
-    tnTunnel = TNTunnel(config)
-    wavesTunnel = WavesTunnel(config)
-    wavesThread = threading.Thread(target=wavesTunnel.iterate)
-    ercThread = threading.Thread(target=tnTunnel.iterate)
-    wavesThread.start()
-    ercThread.start()
-    app.run(port=8080, host='0.0.0.0')
-
-main()

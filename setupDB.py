@@ -9,7 +9,6 @@ def createdb():
             height integer
         );
     '''
-
     createTableExecuted = '''
         CREATE TABLE IF NOT EXISTS executed (
             id integer PRIMARY KEY,
@@ -22,11 +21,25 @@ def createdb():
             amountFee real
     );
     '''
+    createTableErrors = '''
+        CREATE TABLE IF NOT EXISTS errors (
+            id integer PRIMARY KEY,
+            sourceAddress text ,
+            targetAddress text ,
+            tnTxId text ,
+            wavesTxId text ,
+            timestamp text,
+            amount real,
+            error text,
+            exception text
+    );
+    '''
 
     con = sqlite.connect('gateway.db')
     cursor = con.cursor()
     cursor.execute(createHeightTable)
     cursor.execute(createTableExecuted)
+    cursor.execute(createTableErrors)
     con.commit()
     con.close()
 
