@@ -4,24 +4,30 @@ TN Platform.
 ## Installation
 Clone this repository and edit the config.json file according to your needs. Install the following dependencies:
 ```
-pywaves
-flask
+pycwaves
+fastapi[all]
+jinja2
+aiofiles
 ```
-via pip and run 
+via pip and run the gateway by
 ```
-python setupdb.py
-```
-then run the gateway by
-```
-python gateway.py
+python start.py
 ```
 ## Configuration of the config file
 The config.json file includes all necessary settings that need to be connfigured in order to run a proper gateway:
 ```
 {
+    "main": {
+        "port": <portnumber to run the webinterface on>,
+        "name": "Tokenname",
+        "company": "Gateways Ltd",
+        "contact-email": "info@contact.us",
+        "contact-telegram": "https://t.me/TurtleNetwork"
+    },
     "waves": {
         "gatewayAddress": "<Waves address of the gateway>",
         "gatewaySeed": "<seed of the above devined address>",
+        "seedenvname": "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
         "assetId": "<the asset id of the proxy token on the Waves platform>",
         "decimals": <number of decimals of the token>,
@@ -33,6 +39,7 @@ The config.json file includes all necessary settings that need to be connfigured
     "tn": {
         "gatewayAddress": "<TN address of the gateway>",
         "gatewaySeed": "<seed of the above devined address>",
+        "seedenvname": "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
         "assetId": "<the asset id of the proxy token on the TN platform>",
         "decimals": <number of decimals of the token>,
@@ -45,7 +52,7 @@ The config.json file includes all necessary settings that need to be connfigured
 ```
 
 ## Running the gateway
-After starting the gateway, it will provide a webpage on port 8080.
+After starting the gateway, it will provide a webpage on the port set in config.json.
 
 ## Usage of the gateway
 This is a simple gateway for TN tokens to the Waves Platform and vice versa. For sending tokens from the Waves Platform to the TN blockchain, just add the TN address that should receive the tokens as the description of the transfer and send the tokens to the Waves address of the gateway.

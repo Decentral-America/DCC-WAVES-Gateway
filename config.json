@@ -1,5 +1,6 @@
 {
     "main": {
+        "port": <port number to run the webinterface on>,
         "name": "Tokenname",
         "company": "Gateways Ltd",
         "contact-email": "info@contact.us",
@@ -8,7 +9,7 @@
     "waves": {
         "gatewayAddress": "<Waves address of the gateway>",
         "gatewaySeed": "<seed of the above devined address>",
-        "seedenvname" : "",
+        "seedenvname" : "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
         "assetId": "<the asset id of the proxy token on the Waves platform>",
         "decimals": <number of decimals of the token>,
@@ -20,7 +21,7 @@
     "tn": {
         "gatewayAddress": "<TN address of the gateway>",
         "gatewaySeed": "<seed of the above devined address>",
-        "seedenvname" : "",
+        "seedenvname" : "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
         "assetId": "<the asset id of the proxy token on the TN platform>",
         "decimals": <number of decimals of the token>,

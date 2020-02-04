@@ -31,6 +31,6 @@ def main():
     tnThread.start()
     
     #start app
-    uvicorn.run("gateway:app", host="0.0.0.0", port=5050, log_level="info")
+    uvicorn.run("gateway:app", host="0.0.0.0", port=config["main"]["port"], log_level="info")
 
 main()
