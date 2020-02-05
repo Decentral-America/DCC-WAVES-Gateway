@@ -22,7 +22,9 @@ The config.json file includes all necessary settings that need to be connfigured
         "name": "Tokenname",
         "company": "Gateways Ltd",
         "contact-email": "info@contact.us",
-        "contact-telegram": "https://t.me/TurtleNetwork"
+        "contact-telegram": "https://t.me/TurtleNetwork",
+        "admin-username": "admin",
+        "admin-password": "admin"
     },
     "waves": {
         "gatewayAddress": "<Waves address of the gateway>",
@@ -58,6 +60,10 @@ After starting the gateway, it will provide a webpage on the port set in config.
 This is a simple gateway for TN tokens to the Waves Platform and vice versa. For sending tokens from the Waves Platform to the TN blockchain, just add the TN address that should receive the tokens as the description of the transfer and send the tokens to the Waves address of the gateway.
 
 For sending tokens from the TN Platform to the Waves blockchain, just add the Waves address that should receive the tokens as the description of the transfer and send the tokens to the TN address of the gateway.
+
+## Management interface
+After starting the gateway, there are also a couple of management interfaces which are secured by the admin-username and admin-password fields in the config.json:
+    /errors: This will show an overview of detected errors during processing of blocks or transferring funds
 
 # Disclaimer
 USE THIS FRAMEWORK AT YOUR OWN RISK!!! FULL RESPONSIBILITY FOR THE SECURITY AND RELIABILITY OF THE FUNDS TRANSFERRED IS WITH THE OWNER OF THE GATEWAY!!!
