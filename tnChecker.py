@@ -6,6 +6,7 @@ import time
 import base58
 import PyCWaves
 import traceback
+import sharedfunc
 
 class TNChecker(object):
     def __init__(self, config):
@@ -57,12 +58,6 @@ class TNChecker(object):
 
             time.sleep(self.config['tn']['timeInBetweenChecks'])
 
-    def getnow(self):
-        #return current datetime in str format
-        dateTimeObj = datetime.datetime.now()
-        timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
-        return timestampStr
-
     def checkBlock(self, heightToCheck):
         #check content of the block for valid transactions
         block =  requests.get(self.node + '/blocks/at/' + str(heightToCheck)).json()
@@ -87,9 +82,9 @@ class TNChecker(object):
                     else:
                         print("send tx: " + str(tx))
 
-                        timestampStr = self.getnow()
                         cursor = self.dbCon.cursor()
-                        cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "timestamp", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + timestampStr +  '", "' + str(amount) + '", "' + str(self.config['waves']['fee']) + '")')
+                        amount /= pow(10, self.config['waves']['decimals'])
+                        cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(amount) + '", "' + str(self.config['waves']['fee']) + '")')
                         self.dbCon.commit()
                         print('send tokens from tn to waves!')
                 except Exception as e:
@@ -114,24 +109,24 @@ class TNChecker(object):
     def faultHandler(self, tx, error, e=""):
         #handle transfers to the gateway that have problems
         amount = tx['amount'] / pow(10, self.config['tn']['decimals'])
-        timestampStr = self.getnow()
+        timestampStr = sharedfunc.getnow()
 
         if error == "noattachment":
             cursor = self.dbCon.cursor()
-            cursor.execute('INSERT INTO errors ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "timestamp", "amount", "error") VALUES ("' + tx['sender'] + '", "", "", "' + tx['id'] + '", "' + timestampStr +  '", "' + str(amount) + '", "no attachment found on transaction")')
+            cursor.execute('INSERT INTO errors ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "error") VALUES ("' + tx['sender'] + '", "", "", "' + tx['id'] + '", "' + str(amount) + '", "no attachment found on transaction")')
             self.dbCon.commit()
             print(timestampStr + " - Error: no attachment found on transaction from " + tx['sender'] + " - check errors table.")
 
         if error == "txerror":
             targetAddress = base58.b58decode(tx['attachment']).decode()
             cursor = self.dbCon.cursor()
-            cursor.execute('INSERT INTO errors ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "timestamp", "amount", "error", "exception") VALUES ("' + tx['sender'] + '", "' + targetAddress + '", "", "' + tx['id'] + '", "' + timestampStr +  '", "' + str(amount) + '", "tx error, possible incorrect address", "' + str(e) + '")')
+            cursor.execute('INSERT INTO errors ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "error", "exception") VALUES ("' + tx['sender'] + '", "' + targetAddress + '", "", "' + tx['id'] + '", "' + str(amount) + '", "tx error, possible incorrect address", "' + str(e) + '")')
             self.dbCon.commit()
             print(timestampStr + " - Error: on outgoing transaction for transaction from " + tx['sender'] + " - check errors table.")
 
         if error == "senderror":
             targetAddress = base58.b58decode(tx['attachment']).decode()
             cursor = self.dbCon.cursor()
-            cursor.execute('INSERT INTO errors ("sourceAddress", "targetAddress", "tnTxId", "wavesTxId", "timestamp", "amount", "error", "exception") VALUES ("' + tx['sender'] + '", "' + targetAddress + '", "", "' + tx['id'] + '", "' + timestampStr +  '", "' + str(amount) + '", "tx error, check exception error", "' + str(e) + '")')
+            cursor.execute('INSERT INTO errors ("sourceAddress", "targetAddress", "tnTxId", "wavesTxId", "amount", "error", "exception") VALUES ("' + tx['sender'] + '", "' + targetAddress + '", "", "' + tx['id'] + '", "' + str(amount) + '", "tx error, check exception error", "' + str(e) + '")')
             self.dbCon.commit()
             print(timestampStr + " - Error: on outgoing transaction for transaction from " + tx['sender'] + " - check errors table.")

@@ -4,7 +4,9 @@
         "name": "Tokenname",
         "company": "Gateways Ltd",
         "contact-email": "info@contact.us",
-        "contact-telegram": "https://t.me/TurtleNetwork"
+        "contact-telegram": "https://t.me/TurtleNetwork",
+        "admin-username": "admin",
+        "admin-password": "admin"
     },
     "waves": {
         "gatewayAddress": "<Waves address of the gateway>",

@@ -16,7 +16,8 @@ def createdb():
             targetAddress text NOT NULL,
             tnTxId text NOT NULL,
             wavesTxId text NOT NULL,
-            timestamp text,
+            timestamp timestamp
+            default current_timestamp,
             amount real,
             amountFee real
     );
@@ -28,7 +29,8 @@ def createdb():
             targetAddress text ,
             tnTxId text ,
             wavesTxId text ,
-            timestamp text,
+            timestamp timestamp
+            default current_timestamp,
             amount real,
             error text,
             exception text

@@ -5,3 +5,4 @@ __pycache__/*
 config.json
 templates/index_old.html
 templates/index_eth.html
+config_run.json
