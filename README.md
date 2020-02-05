@@ -63,7 +63,9 @@ For sending tokens from the TN Platform to the Waves blockchain, just add the Wa
 
 ## Management interface
 After starting the gateway, there are also a couple of management interfaces which are secured by the admin-username and admin-password fields in the config.json:
+```
     /errors: This will show an overview of detected errors during processing of blocks or transferring funds
+```
 
 # Disclaimer
 USE THIS FRAMEWORK AT YOUR OWN RISK!!! FULL RESPONSIBILITY FOR THE SECURITY AND RELIABILITY OF THE FUNDS TRANSFERRED IS WITH THE OWNER OF THE GATEWAY!!!
