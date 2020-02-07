@@ -84,6 +84,33 @@
     </div>
     <div class="description right">
       <div class="emote">
+        <p>🛈</p>
+      </div>
+      <div class="info">
+        <h3>
+          Fees: 
+        </h3>
+        <table style="width:100%">
+            <tr>
+                <th>Withdraw</th>
+                <th>Deposit</th>
+            </tr>
+            <tr>
+                <td> Total {{ waves_total_fee }} ${{ chainName }} for <strong>Withdraw:</strong></br>
+                    ({{ waves_network_fee }} ${{ chainName }} for network fee)</br>
+                    ({{ waves_gateway_fee }} ${{ chainName }} for gateway fee)</br>
+                    Note: Transaction must be higher than {{ waves_total_fee }} ${{ chainName }}.</br></td>
+                <td> Total {{ tn_total_fee }} ${{ chainName }} for <strong>Deposit:</strong></br>
+                    ({{ tn_network_fee }} ${{ chainName }} for network fee)</br>
+                    ({{ tn_gateway_fee }} ${{ chainName }} for gateway fee)</br>
+                    Note: Transaction must be higher than {{ tn_total_fee }} ${{ chainName }}.</br></td>
+            </tr>
+        </table>
+        <p>&nbsp;</p>
+      </div>
+    </div>
+    <div class="description up">
+      <div class="emote">
         <p>⚠</p>
       </div>
       <div class="disclaimer">
@@ -92,13 +119,10 @@
           gateway controlled wallets.
         </h3>
         <h3>
-          Fees: network fees + {{ fee }} per transaction </br>
-          Do not send less than network fee + {{ fee }} + (your balance you wish to deposit or withdraw)
-        </h3>
-        <h3>
           <strong>Recovery policy</strong></br>
           - Please contact support within 3 days of transfer issue.</br>
-          - Recovery fee on end-user mistake = 15%.</br>
+          - Minimal amount to recover {{ recovery_amount }} ${{ chainName }}.</br>
+          - Recovery fee on end-user mistake = {{ recovery_fee }}%.</br>
         </h3>
         <p class="mail">
           This gateway is run by {{ company }} - contact us at <a href="mailto:{{ email }}">{{ email }}</a> or Telegram at <a href="{{ telegram }}">{{ telegram }}</a>
