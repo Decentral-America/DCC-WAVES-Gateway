@@ -1,4 +1,8 @@
 # TN <-> Waves Platform Gateway Framework
+
+Inspired by Hawky's Waves-ERC20 Gateway: https://github.com/PyWaves/Waves-ERC20-Gateway
+But rewritten to be published under FOSS license.
+
 This framework allows to easily establish a gateway between any Waves token and the
 TN Platform.
 ## Installation
@@ -23,6 +27,8 @@ The config.json file includes all necessary settings that need to be connfigured
         "company": "Gateways Ltd",
         "contact-email": "info@contact.us",
         "contact-telegram": "https://t.me/TurtleNetwork",
+        "recovery_amount": <minimum recovery amount>,
+        "recovery_fee": <recovery fee in %>,
         "admin-username": "admin",
         "admin-password": "admin"
     },
@@ -31,6 +37,8 @@ The config.json file includes all necessary settings that need to be connfigured
         "gatewaySeed": "<seed of the above devined address>",
         "seedenvname": "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
+        "gateway_fee": <the gatewway part of the fee calculated in the proxy token, e.g., 0.1>,
+        "network_fee": <the tx part of the fee calculated in the proxy token, e.g., 0.1>,
         "assetId": "<the asset id of the proxy token on the Waves platform>",
         "decimals": <number of decimals of the token>,
         "network": "<Waves network you want to connect to (testnet|stagenent|mainnet)>",
@@ -43,6 +51,8 @@ The config.json file includes all necessary settings that need to be connfigured
         "gatewaySeed": "<seed of the above devined address>",
         "seedenvname": "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
+        "gateway_fee": <the gatewway part of the fee calculated in the proxy token, e.g., 0.1>,
+        "network_fee": <the tx part of the fee calculated in the proxy token, e.g., 0.1>,
         "assetId": "<the asset id of the proxy token on the TN platform>",
         "decimals": <number of decimals of the token>,
         "network": "<Waves network you want to connect to (testnet|mainnet)>",
