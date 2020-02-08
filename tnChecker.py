@@ -93,17 +93,16 @@ class TNChecker(object):
     def checkTx(self, tx):
         #check the transaction
          if tx['type'] == 4 and tx['recipient'] == self.config['tn']['gatewayAddress'] and (tx['assetId'] == self.config['tn']['assetId'] or (tx['assetId'] == None and self.config['tn']['assetId'] == 'TN')):
-            if tx['assetId'] == self.config['tn']['assetId']:
-                #check if there is an attachment
-                targetAddress = base58.b58decode(tx['attachment']).decode()
-                if len(targetAddress) > 1:
-                    #check if we already processed this tx
-                    cursor = self.dbCon.cursor()
-                    result = cursor.execute('SELECT wavesTxId FROM executed WHERE tnTxId = "' + tx['id'] + '"').fetchall()
+            #check if there is an attachment
+            targetAddress = base58.b58decode(tx['attachment']).decode()
+            if len(targetAddress) > 1:
+                #check if we already processed this tx
+                cursor = self.dbCon.cursor()
+                result = cursor.execute('SELECT wavesTxId FROM executed WHERE tnTxId = "' + tx['id'] + '"').fetchall()
 
-                    if len(result) == 0: return True
-                else:
-                    self.faultHandler(tx, 'noattachment')
+                if len(result) == 0: return True
+            else:
+                self.faultHandler(tx, 'noattachment')
 
         return False
         
