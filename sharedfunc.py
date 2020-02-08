@@ -1,3 +1,5 @@
+import datetime
+
 def getnow():
     #return current datetime in str format
     dateTimeObj = datetime.datetime.now()
