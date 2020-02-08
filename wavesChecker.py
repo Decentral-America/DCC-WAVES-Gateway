@@ -92,18 +92,17 @@ class WavesChecker(object):
 
     def checkTx(self, tx):
         #check the transaction
-        if tx['type'] == 4 and tx['recipient'] == self.config['waves']['gatewayAddress']:
-            if (not(self.config['waves']['assetId'] == 'WAVES') and tx['assetId'] == self.config['waves']['assetId']) or ((self.config['waves']['assetId'] == 'WAVES') and tx['assetId'] == None): 
-                #check if there is an attachment
-                targetAddress = base58.b58decode(tx['attachment']).decode()
-                if len(targetAddress) > 1:
-                    #check if we already processed this tx
-                    cursor = self.dbCon.cursor()
-                    result = cursor.execute('SELECT tnTxId FROM executed WHERE wavesTxId = "' + tx['id'] + '"').fetchall()
+         if tx['type'] == 4 and tx['recipient'] == self.config['waves']['gatewayAddress'] and (tx['assetId'] == self.config['waves']['assetId'] or (tx['assetId'] == None and self.config['waves']['assetId'] == 'WAVES')):
+            #check if there is an attachment
+            targetAddress = base58.b58decode(tx['attachment']).decode()
+            if len(targetAddress) > 1:
+                #check if we already processed this tx
+                cursor = self.dbCon.cursor()
+                result = cursor.execute('SELECT tnTxId FROM executed WHERE wavesTxId = "' + tx['id'] + '"').fetchall()
 
-                    if len(result) == 0: return True
-                else:
-                    self.faultHandler(tx, 'noattachment')
+                if len(result) == 0: return True
+            else:
+                self.faultHandler(tx, 'noattachment')
 
         return False
         
