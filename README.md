@@ -18,7 +18,7 @@ via pip and run the gateway by
 python start.py
 ```
 ## Configuration of the config file
-The config.json file includes all necessary settings that need to be connfigured in order to run a proper gateway:
+The config.json file includes all necessary settings that need to be configured in order to run a proper gateway:
 ```
 {
     "main": {
@@ -59,6 +59,52 @@ The config.json file includes all necessary settings that need to be connfigured
         "node": "<the TN node you want to connect to>",
         "timeInBetweenChecks": <seconds in between a check for a new block>,
         "confirmations": <number of confirmations necessary in order to accept a transaction>
+    }
+}
+```
+
+###Example config.json
+```
+{
+    "main": {
+        "port": 5060,
+        "name": "TrueUSD",
+        "company": "Gateways Ltd",
+        "contact-email": "info@contact.us",
+        "contact-telegram": "https://t.me/TurtleNetwork",
+        "recovery_amount": 2000,
+        "recovery_fee": 15,
+        "admin-username": "admin",
+        "admin-password": "admin"
+    },
+    "erc20": {
+        "node": "https://mainnet.infura.io/v3/353492101df944c5a9328be0e999999",
+        "contract": {
+            "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
+            "decimals": 18
+        },
+        "fee": 0.4,
+        "gateway_fee": 0.2,
+        "network_fee": 0.2,
+        "gatewayAddress": "0xC05182ecd39C34b00B6Dae8F8ea53AEE33123456",
+        "privateKey": "0x12346578913654987srg132654987sfdg654sg654sfg654sdfg645",
+        "seedenvname" : "",
+        "timeInBetweenChecks": 10,
+        "confirmations": 5
+    },
+    "tn": {
+        "gatewayAddress": "3Jejtjd55onPw1Zous7WxFdxMCTw1wRvymL",
+        "gatewaySeed": "sneaky sneaky",
+        "seedenvname" : "",
+        "fee": 0.4,
+        "gateway_fee": 0.2,
+        "network_fee": 0.2,
+        "assetId": "C2684nYZQtWufWMn7f8ogAmwZ1fZZ5vUQC28PdHuZLMp",
+        "decimals": 2,
+        "network": "turtlenetwork",
+        "node": "https://privatenode2.blackturtle.eu",
+        "timeInBetweenChecks": 10,
+        "confirmations": 5
     }
 }
 ```
