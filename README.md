@@ -77,20 +77,19 @@ The config.json file includes all necessary settings that need to be configured 
         "admin-username": "admin",
         "admin-password": "admin"
     },
-    "erc20": {
-        "node": "https://mainnet.infura.io/v3/353492101df944c5a9328be0e999999",
-        "contract": {
-            "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
-            "decimals": 18
-        },
-        "fee": 0.4,
-        "gateway_fee": 0.2,
-        "network_fee": 0.2,
-        "gatewayAddress": "0xC05182ecd39C34b00B6Dae8F8ea53AEE33123456",
-        "privateKey": "0x12346578913654987srg132654987sfdg654sg654sfg654sdfg645",
+    "waves": {
+        "gatewayAddress": "3PPCNT4wWpyGyHQ6bkKFi8wyCKP8hbeXXX",
+        "gatewaySeed": "sneaky sneaky",
         "seedenvname" : "",
-        "timeInBetweenChecks": 10,
-        "confirmations": 5
+        "fee": 0.09,
+        "gateway_fee": 0.05,
+        "network_fee": 0.04,
+        "assetId": "bPWkA3MNyEr1TuDchWgdpqJZhGhfPXj7dJdr3qiW2kD",
+        "decimals": 8,
+        "network": "mainnet",
+        "node": "https://node3.turtlenetwork.eu",
+        "timeInBetweenChecks": 1,
+        "confirmations": 10
     },
     "tn": {
         "gatewayAddress": "3Jejtjd55onPw1Zous7WxFdxMCTw1wRvymL",

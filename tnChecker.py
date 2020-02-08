@@ -92,7 +92,7 @@ class TNChecker(object):
 
     def checkTx(self, tx):
         #check the transaction
-         if tx['type'] == 4 and tx['recipient'] == self.config['tn']['gatewayAddress'] and (tx['assetId'] == self.config['tn']['assetId'] or (tx['assetId'] == None and self.config['tn']['assetId'] == 'TN')):
+        if tx['type'] == 4 and tx['recipient'] == self.config['tn']['gatewayAddress'] and (tx['assetId'] == self.config['tn']['assetId'] or (tx['assetId'] == None and self.config['tn']['assetId'] == 'TN')):
             #check if there is an attachment
             targetAddress = base58.b58decode(tx['attachment']).decode()
             if len(targetAddress) > 1:

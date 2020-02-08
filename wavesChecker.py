@@ -92,7 +92,7 @@ class WavesChecker(object):
 
     def checkTx(self, tx):
         #check the transaction
-         if tx['type'] == 4 and tx['recipient'] == self.config['waves']['gatewayAddress'] and (tx['assetId'] == self.config['waves']['assetId'] or (tx['assetId'] == None and self.config['waves']['assetId'] == 'WAVES')):
+        if tx['type'] == 4 and tx['recipient'] == self.config['waves']['gatewayAddress'] and (tx['assetId'] == self.config['waves']['assetId'] or (tx['assetId'] == None and self.config['waves']['assetId'] == 'WAVES')):
             #check if there is an attachment
             targetAddress = base58.b58decode(tx['attachment']).decode()
             if len(targetAddress) > 1:
