@@ -63,7 +63,7 @@ The config.json file includes all necessary settings that need to be configured 
 }
 ```
 
-###Example config.json
+### Example config.json
 ```
 {
     "main": {
