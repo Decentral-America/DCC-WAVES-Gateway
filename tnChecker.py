@@ -68,7 +68,7 @@ class TNChecker(object):
                 amount = transaction['amount'] / pow(10, self.config['tn']['decimals'])
                 amount -= self.config['waves']['fee']
                 amount *= pow(10, self.config['waves']['decimals'])
-                amount = int(amount)
+                amount = int(round(amount))
 
                 try:
                     addr = self.pwW.Address(targetAddress)
@@ -84,7 +84,7 @@ class TNChecker(object):
 
                         cursor = self.dbCon.cursor()
                         amount /= pow(10, self.config['waves']['decimals'])
-                        cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "tnTxId", "wavesTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(amount) + '", "' + str(self.config['waves']['fee']) + '")')
+                        cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "tnTxId", "wavesTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(round(amount)) + '", "' + str(self.config['waves']['fee']) + '")')
                         self.dbCon.commit()
                         print('send tokens from tn to waves!')
                 except Exception as e:

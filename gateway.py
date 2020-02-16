@@ -68,3 +68,12 @@ async def getErrors(request: Request, username: str = Depends(get_current_userna
         result = dbCon.cursor().execute('SELECT * FROM errors').fetchall()
         return templates.TemplateResponse("errors.html", {"request": request, "errors": result})
 
+@app.get('/executed')
+async def getErrors(request: Request, username: str = Depends(get_current_username)):
+    if (config["main"]["admin-username"] == "admin" and config["main"]["admin-password"] == "admin"):
+        return {"message": "change the default username and password please!"}
+    
+    if username == config["main"]["admin-username"]:
+        dbCon = sqlite.connect('gateway.db')
+        result = dbCon.cursor().execute('SELECT * FROM executed').fetchall()
+        return templates.TemplateResponse("tx.html", {"request": request, "txs": result})
