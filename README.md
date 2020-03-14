@@ -75,7 +75,8 @@ The config.json file includes all necessary settings that need to be configured 
         "recovery_amount": 2000,
         "recovery_fee": 15,
         "admin-username": "admin",
-        "admin-password": "admin"
+        "admin-password": "admin",
+        "disclaimer": "link to disclaimer file online"
     },
     "waves": {
         "gatewayAddress": "3PPCNT4wWpyGyHQ6bkKFi8wyCKP8hbeXXX",

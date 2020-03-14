@@ -8,6 +8,9 @@ import uvicorn
 from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
+import os
+import PyCWaves
+
 
 app = FastAPI()
 security = HTTPBasic()
@@ -27,6 +30,26 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
             headers={"WWW-Authenticate": "Basic"},
         )
     return credentials.username
+
+def get_tnBalance():
+    pwTN = PyCWaves.PyCWaves()
+    pwTN.THROW_EXCEPTION_ON_ERROR = True
+    pwTN.setNode(node=config['tn']['node'], chain=config['tn']['network'], chain_id='L')
+    seed = os.getenv(config['tn']['seedenvname'], config['tn']['gatewaySeed'])
+    tnAddress = pwTN.Address(seed=seed)
+    myBalance = tnAddress.balance(assetId=config['tn']['assetId'])
+    myBalance /= pow(10, config['tn']['decimals'])
+    return int(round(myBalance))
+
+def get_otherBalance():
+    pwTN = PyCWaves.PyCWaves()
+    pwTN.THROW_EXCEPTION_ON_ERROR = True
+    pwTN.setNode(node=config['waves']['node'], chain=config['waves']['network'], chain_id='L')
+    seed = os.getenv(config['waves']['seedenvname'], config['waves']['gatewaySeed'])
+    tnAddress = pwTN.Address(seed=seed)
+    myBalance = tnAddress.balance(assetId=config['waves']['assetId'])
+    myBalance /= pow(10, config['waves']['decimals'])
+    return int(round(myBalance))
 
 
 @app.get("/")
@@ -82,6 +105,8 @@ async def getErrors(request: Request, username: str = Depends(get_current_userna
 @app.get("/api/fullinfo")
 async def api_fullinfo(request: Request):
     heights = await getHeights()
+    tnBalance = get_tnBalance()
+    otherBalance = get_otherBalance()
     return {"chainName": config['main']['name'],
             "assetID": config['tn']['assetId'],
             "tn_gateway_fee":config['tn']['gateway_fee'],
@@ -100,4 +125,6 @@ async def api_fullinfo(request: Request):
             "tnHeight": heights['TN'],
             "tnAddress": config['tn']['gatewayAddress'],
             "wavesAddress": config['waves']['gatewayAddress'],
-            "disclaimer": config['main']['disclaimer']}
+            "disclaimer": config['main']['disclaimer'],
+            "tn_balance": tnBalance,
+            "other_balance": otherBalance}
