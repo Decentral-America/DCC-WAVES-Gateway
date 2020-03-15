@@ -7,6 +7,7 @@ import base58
 import PyCWaves
 import traceback
 import sharedfunc
+from verification import verifier
 
 class WavesChecker(object):
     def __init__(self, config):
@@ -23,6 +24,7 @@ class WavesChecker(object):
         self.pwW.setNode(node=self.node, chain=self.config['waves']['network'])
         self.wAddress = self.pwW.Address(seed=os.getenv(self.config['waves']['seedenvname'], self.config['waves']['gatewaySeed']))
         self.wAsset = self.pwW.Asset(self.config['waves']['assetId'])
+        self.verifier = verifier(config)
 
         cursor = self.dbCon.cursor()
         self.lastScannedBlock = cursor.execute('SELECT height FROM heights WHERE chain = "Waves"').fetchall()[0][0]
@@ -89,6 +91,8 @@ class WavesChecker(object):
                         print('send tokens from waves to tn!')
                 except Exception as e:
                     self.faultHandler(transaction, "txerror", e=e)
+
+                self.verifier.verifyTN(tx)
 
     def checkTx(self, tx):
         #check the transaction
