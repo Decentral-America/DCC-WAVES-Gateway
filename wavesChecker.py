@@ -72,27 +72,30 @@ class WavesChecker(object):
                 amount *= pow(10, self.config['tn']['decimals'])
                 amount = int(round(amount))
 
-                try:
-                    addr = self.pwTN.Address(targetAddress)
-                    if self.config['tn']['assetId'] == 'TN':
-                        tx = self.tnAddress.sendWaves(addr, amount, 'Thanks for using our service!', txFee=2000000)
-                    else:
-                        tx = self.tnAddress.sendAsset(addr, self.tnAsset, amount, 'Thanks for using our service!', txFee=2000000)
+                if amount < 0:
+                    self.faultHandler(transaction, "senderror", e='under minimum amount')
+                else:
+                    try:
+                        addr = self.pwTN.Address(targetAddress)
+                        if self.config['tn']['assetId'] == 'TN':
+                            tx = self.tnAddress.sendWaves(addr, amount, 'Thanks for using our service!', txFee=2000000)
+                        else:
+                            tx = self.tnAddress.sendAsset(addr, self.tnAsset, amount, 'Thanks for using our service!', txFee=2000000)
 
-                    if 'error' in tx:
-                        self.faultHandler(transaction, "senderror", e=tx['message'])
-                    else:
-                        print("send tx: " + str(tx))
+                        if 'error' in tx:
+                            self.faultHandler(transaction, "senderror", e=tx['message'])
+                        else:
+                            print("send tx: " + str(tx))
 
-                        cursor = self.dbCon.cursor()
-                        amount /= pow(10, self.config['tn']['decimals'])
-                        cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(round(amount)) + '", "' + str(self.config['tn']['fee']) + '")')
-                        self.dbCon.commit()
-                        print('send tokens from waves to tn!')
-                except Exception as e:
-                    self.faultHandler(transaction, "txerror", e=e)
+                            cursor = self.dbCon.cursor()
+                            amount /= pow(10, self.config['tn']['decimals'])
+                            cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(round(amount)) + '", "' + str(self.config['tn']['fee']) + '")')
+                            self.dbCon.commit()
+                            print('send tokens from waves to tn!')
+                    except Exception as e:
+                        self.faultHandler(transaction, "txerror", e=e)
 
-                self.verifier.verifyTN(tx)
+                    self.verifier.verifyTN(tx)
 
     def checkTx(self, tx):
         #check the transaction
