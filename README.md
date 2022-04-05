@@ -4,7 +4,7 @@ Inspired by Hawky's Waves-ERC20 Gateway: https://github.com/PyWaves/Waves-ERC20-
 But rewritten to be published under FOSS license.
 
 This framework allows to easily establish a gateway between any Waves token and the
-TN Platform.
+DCC protocol.
 ## Installation
 Clone this repository and edit the config.json file according to your needs. Install the following dependencies:
 ```
@@ -23,10 +23,10 @@ The config.json file includes all necessary settings that need to be configured 
 {
     "main": {
         "port": <portnumber to run the webinterface on>,
-        "name": "Tokenname",
-        "company": "Gateways Ltd",
+        "name": "Token name",
+        "company": "DCC Gateways",
         "contact-email": "info@contact.us",
-        "contact-telegram": "https://t.me/TurtleNetwork",
+        "contact-telegram": "https://t.me/Decentralchain",
         "recovery_amount": <minimum recovery amount>,
         "recovery_fee": <recovery fee in %>,
         "admin-username": "admin",
@@ -46,17 +46,17 @@ The config.json file includes all necessary settings that need to be configured 
         "timeInBetweenChecks": <seconds in between a check for a new block>,
         "confirmations": <number of confirmations necessary in order to accept a transaction>
     },
-    "tn": {
-        "gatewayAddress": "<TN address of the gateway>",
+    "dcc": {
+        "gatewayAddress": "<DCC address of the gateway>",
         "gatewaySeed": "<seed of the above devined address>",
         "seedenvname": "<the ENV name to store your seed instead of the field above>",
         "fee": <the fee you want to collect on the gateway, calculated in the proxy token, e.g., 0.1>,
         "gateway_fee": <the gatewway part of the fee calculated in the proxy token, e.g., 0.1>,
         "network_fee": <the tx part of the fee calculated in the proxy token, e.g., 0.1>,
-        "assetId": "<the asset id of the proxy token on the TN platform>",
+        "assetId": "<the asset id of the proxy token on the DCC platform>",
         "decimals": <number of decimals of the token>,
         "network": "<Waves network you want to connect to (testnet|mainnet)>",
-        "node": "<the TN node you want to connect to>",
+        "node": "<the DCC node you want to connect to>",
         "timeInBetweenChecks": <seconds in between a check for a new block>,
         "confirmations": <number of confirmations necessary in order to accept a transaction>
     }
@@ -71,7 +71,7 @@ The config.json file includes all necessary settings that need to be configured 
         "name": "TrueUSD",
         "company": "Gateways Ltd",
         "contact-email": "info@contact.us",
-        "contact-telegram": "https://t.me/TurtleNetwork",
+        "contact-telegram": "https://t.me/Decentralchain",
         "recovery_amount": 2000,
         "recovery_fee": 15,
         "admin-username": "admin",
@@ -90,7 +90,7 @@ The config.json file includes all necessary settings that need to be configured 
         "assetId": "bPWkA3MNyEr1TuDchWgdpqJZhGhfPXj7dJdr3qiW2kD",
         "decimals": 8,
         "network": "mainnet",
-        "node": "https://node3.turtlenetwork.eu",
+        "node": "https://mainnet-node.decentralchain.io",
         "timeInBetweenChecks": 1,
         "confirmations": 10
     },
@@ -103,8 +103,8 @@ The config.json file includes all necessary settings that need to be configured 
         "network_fee": 0.2,
         "assetId": "C2684nYZQtWufWMn7f8ogAmwZ1fZZ5vUQC28PdHuZLMp",
         "decimals": 2,
-        "network": "turtlenetwork",
-        "node": "https://privatenode2.blackturtle.eu",
+        "network": "mainnet",
+        "node": "https://mainnet-node.decentralchain.io",
         "timeInBetweenChecks": 10,
         "confirmations": 5
     }
@@ -115,9 +115,9 @@ The config.json file includes all necessary settings that need to be configured 
 After starting the gateway, it will provide a webpage on the port set in config.json.
 
 ## Usage of the gateway
-This is a simple gateway for TN tokens to the Waves Platform and vice versa. For sending tokens from the Waves Platform to the TN blockchain, just add the TN address that should receive the tokens as the description of the transfer and send the tokens to the Waves address of the gateway.
+This is a simple gateway for DCC tokens to the Waves Platform and vice versa. For sending tokens from the Waves Platform to the DCC blockchain, just add the DCC address that should receive the tokens as the description of the transfer and send the tokens to the Waves address of the gateway.
 
-For sending tokens from the TN Platform to the Waves blockchain, just add the Waves address that should receive the tokens as the description of the transfer and send the tokens to the TN address of the gateway.
+For sending tokens from the DCC Platform to the Waves blockchain, just add the Waves address that should receive the tokens as the description of the transfer and send the tokens to the TN address of the gateway.
 
 ## Management interface
 After starting the gateway, there are also a couple of management interfaces which are secured by the admin-username and admin-password fields in the config.json:
