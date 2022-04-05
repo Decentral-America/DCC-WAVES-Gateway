@@ -14,12 +14,12 @@ class TNChecker(object):
         self.config = config
         self.dbCon = sqlite.connect('gateway.db')
 
-        self.node = self.config['tn']['node']
+        self.node = self.config['dcc']['node']
         self.pwTN = PyCWaves.PyCWaves()
-        self.pwTN.setNode(node=self.node, chain=self.config['tn']['network'], chain_id='L')
-        seed = os.getenv(self.config['tn']['seedenvname'], self.config['tn']['gatewaySeed'])
+        self.pwTN.setNode(node=self.node, chain=self.config['dcc']['network'], chain_id='W')
+        seed = os.getenv(self.config['dcc']['seedenvname'], self.config['dcc']['gatewaySeed'])
         self.tnAddress = self.pwTN.Address(seed=seed)
-        self.tnAsset = self.pwTN.Asset(self.config['tn']['assetId'])
+        self.tnAsset = self.pwTN.Asset(self.config['dcc']['assetId'])
         self.pwW = PyCWaves.PyCWaves()
         self.pwW.setNode(node=self.config['waves']['node'], chain=self.config['waves']['network'])
         self.wAddress = self.pwW.Address(seed=os.getenv(self.config['waves']['seedenvname'], self.config['waves']['gatewaySeed']))
@@ -27,7 +27,7 @@ class TNChecker(object):
         self.verifier = verifier(config)
 
         cursor = self.dbCon.cursor()
-        self.lastScannedBlock = cursor.execute('SELECT height FROM heights WHERE chain = "TN"').fetchall()[0][0]
+        self.lastScannedBlock = cursor.execute('SELECT height FROM heights WHERE chain = "DCC"').fetchall()[0][0]
 
     def getCurrentBlock(self):
         #return current block on the chain - try/except in case of timeouts
@@ -45,20 +45,20 @@ class TNChecker(object):
         self.dbCon = sqlite.connect('gateway.db')
         while True:
             try:
-                nextblock = self.getCurrentBlock() - self.config['tn']['confirmations']
+                nextblock = self.getCurrentBlock() - self.config['dcc']['confirmations']
 
                 if nextblock > self.lastScannedBlock:
                     self.lastScannedBlock += 1
                     self.checkBlock(self.lastScannedBlock)
                     cursor = self.dbCon.cursor()
-                    cursor.execute('UPDATE heights SET "height" = ' + str(self.lastScannedBlock) + ' WHERE "chain" = "TN"')
+                    cursor.execute('UPDATE heights SET "height" = ' + str(self.lastScannedBlock) + ' WHERE "chain" = "DCC"')
                     self.dbCon.commit()
             except Exception as e:
                 self.lastScannedBlock -= 1
                 print('Something went wrong during tn block iteration: ')
                 print(traceback.TracebackException.from_exception(e))
 
-            time.sleep(self.config['tn']['timeInBetweenChecks'])
+            time.sleep(self.config['dcc']['timeInBetweenChecks'])
 
     def checkBlock(self, heightToCheck):
         #check content of the block for valid transactions
@@ -67,7 +67,7 @@ class TNChecker(object):
             if self.checkTx(transaction):
                 targetAddress = base58.b58decode(transaction['attachment']).decode()
 
-                amount = transaction['amount'] / pow(10, self.config['tn']['decimals'])
+                amount = transaction['amount'] / pow(10, self.config['dcc']['decimals'])
                 amount -= self.config['waves']['fee']
                 amount *= pow(10, self.config['waves']['decimals'])
                 amount = int(round(amount))
@@ -99,7 +99,7 @@ class TNChecker(object):
 
     def checkTx(self, tx):
         #check the transaction
-        if tx['type'] == 4 and tx['recipient'] == self.config['tn']['gatewayAddress'] and (tx['assetId'] == self.config['tn']['assetId'] or (tx['assetId'] == None and self.config['tn']['assetId'] == 'TN')):
+        if tx['type'] == 4 and tx['recipient'] == self.config['dcc']['gatewayAddress'] and (tx['assetId'] == self.config['dcc']['assetId'] or (tx['assetId'] == None and self.config['dcc']['assetId'] == 'DCC')):
             #check if there is an attachment
             targetAddress = base58.b58decode(tx['attachment']).decode()
             if len(targetAddress) > 1:
@@ -115,7 +115,7 @@ class TNChecker(object):
         
     def faultHandler(self, tx, error, e=""):
         #handle transfers to the gateway that have problems
-        amount = tx['amount'] / pow(10, self.config['tn']['decimals'])
+        amount = tx['amount'] / pow(10, self.config['dcc']['decimals'])
         timestampStr = sharedfunc.getnow()
 
         if error == "noattachment":

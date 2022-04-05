@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="/static/index.css">
   <link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">	<script src="/static/app.js"></script>
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">	
   <title>{{chainName}} <-> TN Gateway</title>
 </head>
 
@@ -49,9 +49,9 @@
         <p>🛈</p>
       </div>
       <div class="info">
-        <h2>This is a gateway for exchanging {{chainName}} tokens between the Waves and Turtle Network Platform.</h2>
+        <h2>This is a gateway for exchanging {{chainName}} tokens between the Waves and DecentralChain Platform.</h2>
         <h3>
-					<strong>To Send {{chainName}} to Waves Network,</strong> using Turtle Network wallet
+					<strong>To Send {{chainName}} to Waves Network,</strong> using DecentralChain wallet
         </h3>
         <p>
           - Click "SEND"</br>
@@ -59,12 +59,12 @@
           - Attachment = only insert your Waves Network wallet address</br>
         </p>
         <h3>
-					<strong>To Send {{chainName}} to Turtle Network,</strong> using Waves Network wallet
+					<strong>To Send {{chainName}} to DecentralChain,</strong> using Waves Network wallet
         </h3>
         <p>
           - Click "SEND"</br>
           - Recipient's Address = {{ wavesAddress }}</br>
-          - Description = only insert your Turtle Network wallet address</br>
+          - Description = only insert your DecentralChain wallet address</br>
         </p>
       </div>
     </div>
@@ -74,7 +74,7 @@
       </div>
       <div class="info">
         <p class="address">
-          Turtle Network height: <strong>{{ tnHeight }}</strong>, Turtle Network Gateway Address: <strong>{{ tnAddress }}</strong>
+          DecentralChain height: <strong>{{ tnHeight }}</strong>, DecentralChain Gateway Address: <strong>{{ tnAddress }}</strong>
         </p>
         <p class="address">
           Waves Network height: <strong>{{ wavesHeight }}</strong>, Waves Network Gateway Address: <strong>{{ wavesAddress }}</strong>
@@ -133,35 +133,6 @@
           By using this service you accept the following <a href="{{ disclaimer }}">agreement</a>
         </p>
       </div>
-    </div>
-    <div class="description up" style="display: none;">
-      <div class="emote">
-        <p>⇌</p>
-      </div>
-      <form class="form" role="form">
-        <div class="fields">
-          <div class="eth">
-            <label for="ethAddress">
-              ETH Address
-            </label>
-            <input type="text" class="form-control" id="ethAddress" />
-          </div>
-          <div class="tn">
-            <label for="tnAddress">
-              TN Address
-            </label>
-            <input type="text" class="form-control" id="tnAddress" />
-          </div>
-        </div>
-        <div class="buttons">
-          <button onclick="establishTunnel(event)" class="establish">
-            Establish Tunnel
-          </button>
-          <button onclick="checkETHAddress(event)" class="check">
-            Check ETH Tunnel
-          </button>
-        </div>
-      </form>
     </div>
     <a class="freepik" href="https://www.freepik.com/free-photos-vectors/background">Background vector created by pikisuperstar - www.freepik.com</a>
   </div>

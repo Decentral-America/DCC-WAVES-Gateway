@@ -8,10 +8,10 @@ class verifier(object):
         self.config = config
         self.dbCon = sqlite.connect('gateway.db', check_same_thread=False)
 
-        self.w3 = Web3(Web3.HTTPProvider(self.config['erc20']['node']))
+        self.w3 = Web3(Web3.HTTPProvider(self.config['dcc']['node']))
 
         self.pwTN = PyCWaves.PyCWaves()
-        self.pwTN.setNode(node=self.config['tn']['node'], chain=self.config['tn']['network'], chain_id='L')
+        self.pwTN.setNode(node=self.config['dcc']['node'], chain=self.config['dcc']['network'], chain_id='W')
         self.pwW = PyCWaves.PyCWaves()
         self.pwW.setNode(node=self.config['waves']['node'], chain=self.config['waves']['network'])
 
@@ -45,19 +45,19 @@ class verifier(object):
             verified = self.pwTN.tx(tx['id'])
 
             if verified['height'] > 0:
-                values = ("TN", tx['id'], verified['height'])
+                values = ("DCC", tx['id'], verified['height'])
                 cursor = self.dbCon.cursor()
                 cursor.execute('INSERT INTO verified ("chain", "tx", "block") VALUES (?, ?, ?)', values)
                 self.dbCon.commit()
                 print('tx to tn verified!')
             else:
-                values = ("TN", tx['id'], 0)
+                values = ("DCC", tx['id'], 0)
                 cursor = self.dbCon.cursor()
                 cursor.execute('INSERT INTO verified ("chain", "tx", "block") VALUES (?, ?, ?)', values)
                 self.dbCon.commit()
                 print('tx to tn not verified!')
         except:
-            values = ("TN", tx['id'], 0)
+            values = ("DCC", tx['id'], 0)
             cursor = self.dbCon.cursor()
             cursor.execute('INSERT INTO verified ("chain", "tx", "block") VALUES (?, ?, ?)', values)
             self.dbCon.commit()

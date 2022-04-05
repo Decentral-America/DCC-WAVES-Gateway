@@ -16,10 +16,10 @@ class WavesChecker(object):
 
         self.node = self.config['waves']['node']
         self.pwTN = PyCWaves.PyCWaves()
-        self.pwTN.setNode(node=self.config['tn']['node'], chain=self.config['tn']['network'], chain_id='L')
-        seed = os.getenv(self.config['tn']['seedenvname'], self.config['tn']['gatewaySeed'])
+        self.pwTN.setNode(node=self.config['dcc']['node'], chain=self.config['dcc']['network'], chain_id='W')
+        seed = os.getenv(self.config['dcc']['seedenvname'], self.config['dcc']['gatewaySeed'])
         self.tnAddress = self.pwTN.Address(seed=seed)
-        self.tnAsset = self.pwTN.Asset(self.config['tn']['assetId'])
+        self.tnAsset = self.pwTN.Asset(self.config['dcc']['assetId'])
         self.pwW = PyCWaves.PyCWaves()
         self.pwW.setNode(node=self.node, chain=self.config['waves']['network'])
         self.wAddress = self.pwW.Address(seed=os.getenv(self.config['waves']['seedenvname'], self.config['waves']['gatewaySeed']))
@@ -58,7 +58,7 @@ class WavesChecker(object):
                 print('Something went wrong during waves block iteration: ')
                 print(traceback.TracebackException.from_exception(e))
 
-            time.sleep(self.config['tn']['timeInBetweenChecks'])
+            time.sleep(self.config['dcc']['timeInBetweenChecks'])
 
     def checkBlock(self, heightToCheck):
         #check content of the block for valid transactions
@@ -68,8 +68,8 @@ class WavesChecker(object):
                 targetAddress = base58.b58decode(transaction['attachment']).decode()
 
                 amount = transaction['amount'] / pow(10, self.config['waves']['decimals'])
-                amount -= self.config['tn']['fee']
-                amount *= pow(10, self.config['tn']['decimals'])
+                amount -= self.config['dcc']['fee']
+                amount *= pow(10, self.config['dcc']['decimals'])
                 amount = int(round(amount))
 
                 if amount < 0:
@@ -77,7 +77,7 @@ class WavesChecker(object):
                 else:
                     try:
                         addr = self.pwTN.Address(targetAddress)
-                        if self.config['tn']['assetId'] == 'TN':
+                        if self.config['dcc']['assetId'] == 'DCC':
                             tx = self.tnAddress.sendWaves(addr, amount, 'Thanks for using our service!', txFee=2000000)
                         else:
                             tx = self.tnAddress.sendAsset(addr, self.tnAsset, amount, 'Thanks for using our service!', txFee=2000000)
@@ -88,8 +88,8 @@ class WavesChecker(object):
                             print("send tx: " + str(tx))
 
                             cursor = self.dbCon.cursor()
-                            amount /= pow(10, self.config['tn']['decimals'])
-                            cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(round(amount)) + '", "' + str(self.config['tn']['fee']) + '")')
+                            amount /= pow(10, self.config['dcc']['decimals'])
+                            cursor.execute('INSERT INTO executed ("sourceAddress", "targetAddress", "wavesTxId", "tnTxId", "amount", "amountFee") VALUES ("' + transaction['sender'] + '", "' + targetAddress + '", "' + transaction['id'] + '", "' + tx['id'] + '", "' + str(round(amount)) + '", "' + str(self.config['dcc']['fee']) + '")')
                             self.dbCon.commit()
                             print('send tokens from waves to tn!')
                     except Exception as e:

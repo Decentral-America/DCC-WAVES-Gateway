@@ -14,7 +14,7 @@ def main():
     #check db
     try:
         dbCon = sqlite.connect('gateway.db')
-        result = dbCon.cursor().execute('SELECT chain, height FROM heights WHERE chain = "TN" or chain = "Waves"').fetchall()
+        result = dbCon.cursor().execute('SELECT chain, height FROM heights WHERE chain = "DCC" or chain = "Waves"').fetchall()
         #dbcon.close()
         if len(result) == 0:
             setupDB.initialisedb(config)

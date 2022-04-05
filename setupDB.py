@@ -62,7 +62,7 @@ def createVerify():
 
 def initialisedb(config):
     #get current TN block:
-    tnlatestBlock = requests.get(config['tn']['node'] + '/blocks/height').json()['height'] - 1
+    tnlatestBlock = requests.get(config['dcc']['node'] + '/blocks/height').json()['height'] - 1
 
     #get current Waves block:
     waveslatestBlock = requests.get(config['waves']['node'] + '/blocks/height').json()['height'] - 1
@@ -70,6 +70,6 @@ def initialisedb(config):
     con = sqlite.connect('gateway.db')
     cursor = con.cursor()
     cursor.execute('INSERT INTO heights ("chain", "height") VALUES ("Waves", ' + str(waveslatestBlock) + ')')
-    cursor.execute('INSERT INTO heights ("chain", "height") VALUES ("TN", ' + str(tnlatestBlock) + ')')
+    cursor.execute('INSERT INTO heights ("chain", "height") VALUES ("DCC", ' + str(tnlatestBlock) + ')')
     con.commit()
     con.close()
